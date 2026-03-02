@@ -15,20 +15,28 @@
             overflow-x: hidden;
         }
 
+        /* ENCABEZADO ENVOLVENTE (CUADRO FLOTANTE) */
         .header-container { 
-            position: sticky; 
-            top: 0; 
+            position: fixed; /* Ahora es fijo para que los botones suban por detrás */
+            top: 15px; 
+            left: 50%;
+            transform: translateX(-50%); /* Lo centra perfectamente */
+            width: 90%; /* No ocupa todo el ancho para que se vea el fondo por los lados */
+            max-width: 600px; /* Tamaño de "cuadro" */
+            
             background: linear-gradient(-45deg, #1a1a1a, #4d3300, #1a1a1a, #664400);
             background-size: 400% 400%;
             animation: movimientoFondo 12s ease infinite;
-            padding: 20px 15px; 
+            
+            padding: 15px; 
             z-index: 9999; 
-            border-bottom: 2px solid #ff9800; 
+            border: 2px solid #ff9800; /* Marco completo */
+            border-radius: 20px; /* Bordes redondeados de cuadro */
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
         }
 
         @keyframes movimientoFondo {
@@ -39,81 +47,64 @@
 
         h2 { 
             color: #ffffff; 
-            margin: 0 0 15px 0; 
-            font-size: 1.3rem; 
+            margin: 0 0 10px 0; 
+            font-size: 1.1rem; 
             text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px #ff9800, 0 0 20px #ff9800;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #ff9800;
             font-weight: bold;
         }
 
         .search-wrapper {
             display: flex;
-            gap: 40px; 
-            width: 95%; 
-            max-width: 900px; 
+            gap: 10px; 
+            width: 100%; 
             justify-content: center; 
             align-items: center;
             flex-wrap: wrap;
         }
 
         #buscador {
-            width: 220px; 
-            padding: 12px 100px; 
-            border-radius: 25px; 
+            flex: 1 1 150px;
+            max-width: 250px;
+            padding: 10px 15px; 
+            border-radius: 20px; 
             border: 2px solid #ff9800;
-            background: rgba(0,0,0,0.7); 
+            background: rgba(0,0,0,0.8); 
             color: white; 
-            font-size: 0.9rem; 
+            font-size: 0.85rem; 
             outline: none;
-            transition: 0.3s;
             text-align: left;
-            padding-left: 25px;
         }
 
-        .btn-refresh {
-            background-color: #ff9800;
-            color: black;
-            border: 2px solid #000000;
-            border-radius: 25px;
-            padding: 13px 25px;
+        .btn-refresh, .btn-yt {
+            border: none;
+            border-radius: 20px;
+            padding: 10px 15px;
             font-weight: bold;
             cursor: pointer;
-            white-space: nowrap;
+            font-size: 0.8rem;
             transition: 0.3s;
         }
 
-        .btn-yt {
-            background-color: #ff0000;
-            color: black;
-            border: 2px solid #000000;
-            border-radius: 25px;
-            padding: 12px 25px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            white-space: nowrap;
-            transition: 0.3s;
-        }
+        .btn-refresh { background-color: #ff9800; color: black; }
+        .btn-yt { background-color: #ff0000; color: white; text-decoration: none; }
 
         #buscador:focus, .btn-refresh:focus, .btn-yt:focus, .btn-wise:focus {
             background-color: #ffffff !important;
             color: #000000 !important;
-            border-color: #ffffff !important;
-            transform: scale(1.08);
-            outline: none !important;
-            box-shadow: 0 0 20px rgba(255,255,255,0.6);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px white;
         }
 
+        /* EL GRID AHORA TIENE MARGEN SUPERIOR PARA NO EMPEZAR DEBAJO DEL CUADRO */
         .grid-container {
             display: grid; 
             grid-template-columns: repeat(3, 1fr);
             gap: 15px; 
-            padding: 25px;
+            padding: 20px;
             max-width: 1200px; 
-            margin: 0 auto;
-            /* Espacio para que la primera fila no empiece debajo del header */
-            padding-top: 30px; 
+            margin: 120px auto 0 auto; /* Espacio para el cuadro flotante */
         }
 
         .btn-wise {
@@ -127,28 +118,28 @@
             display: block; 
             text-align: left;
             transition: 0.3s;
-            /* AJUSTE CLAVE: Evita que el botón se esconda al enfocar con mando */
-            scroll-margin-top: 180px; 
+            scroll-margin-top: 200px; /* Para que al enfocar no quede detrás del cuadro */
         }
 
         .hidden { display: none !important; }
 
         @media (max-width: 600px) {
-            .grid-container { grid-template-columns: 1fr; }
-            #buscador { width: 90%; } 
-            .search-wrapper { gap: 15px; flex-direction: column; }
-            .btn-refresh, .btn-yt { width: 90%; text-align: center; }
-            .btn-wise { scroll-margin-top: 250px; }
+            .grid-container { 
+                grid-template-columns: 1fr; 
+                margin-top: 220px; /* Más espacio en móvil vertical */
+            }
+            .header-container { width: 85%; }
+            #buscador { width: 100%; max-width: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="header-container" id="miHeader">
-        <h2>🇪🇸🇪🇸-🎤KARAOKE EL LORA🎤-🇪🇸🇪🇸</h2>
+    <div class="header-container">
+        <h2>🎤🇪🇸-KARAOKE EL LORA-🇪🇸🎤</h2>
         <div class="search-wrapper">
-            <input type="text" id="buscador" class="nav" placeholder="BUSCAR CANCION O ARTISTA..." onkeyup="filtrar()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" id="buscador" class="nav" placeholder="CANCION O ARTISTA....." onkeyup="filtrar()">&nbsp;&nbsp;
+            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;&nbsp;
             <a class="btn-yt nav" href="https://www.youtube.com" target="_blank">YOUTUBE</a>
         </div>
     </div>
@@ -179,10 +170,11 @@
             { titulo: "CUANDO TU VAS-CHENOA", url: "https://m.youtube.com/watch?v=WqTgMjFDNZc" },
             { titulo: "Y SI FUERA ELLA?-ALEJANDRO SANZ", url: "https://m.youtube.com/watch?t=13&v=a7HWFtn32bc" },
             { titulo: "BAILAR PEGADOS-SERGIO DALMA", url: "https://m.youtube.com/watch?v=R32tR0AnPq0" },
-            { titulo: "LA PUERTA VIOLETA-ROZALEN", url: "https://m.youtube.com/watch?v=rGNXe7Ev10Y" },           
+            { titulo: "LA PUERTA VIOLETA-ROZALEN", url: "https://m.youtube.com/watch?v=rGNXe7Ev10Y" },
+            { titulo: "EL TORO GUAPO-EL FARI", url: "vnd.youtube.com/watch?v=m8wgjXrIkk4" },            
             { titulo: "POROMPOMPERO-MANOLO ESCOBAR", url: "https://m.youtube.com/watch?v=fcWW4D4eeB4" },
             { titulo: "SOY MINERO-ANTONIO MOLINA", url: "https://m.youtube.com/watch?v=t-fqlDIGn00" },
-            { titulo: "EL TORO GUAPO-EL FARI", url: "https://m.youtube.com/watch?v=m8wgjXrIkk4" },
+            { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
@@ -202,12 +194,8 @@
             let items = Array.from(navItems).filter(i => i.offsetParent !== null);
             let index = items.indexOf(current);
 
-            if (e.keyCode === 13) { 
-                current.click();
-                return;
-            }
-
-            if (index === -1) { return; }
+            if (e.keyCode === 13) { current.click(); return; }
+            if (index === -1) return;
 
             let target = index;
             let grid = document.getElementById('contenedor');
@@ -215,23 +203,18 @@
 
             if (e.keyCode === 39) target = index + 1; 
             else if (e.keyCode === 37) target = index - 1; 
-            else if (e.keyCode === 40) { // ABAJO
+            else if (e.keyCode === 40) { 
                 if (index < 3) target = 3; 
                 else target = index + cols;
             }
-            else if (e.keyCode === 38) { // ARRIBA
-                if (index >= 3 && index < 3 + cols) {
-                    target = 0; // Salta al buscador desde la primera fila
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); // Asegura scroll arriba
-                } else if (index >= 3) {
-                    target = index - cols;
-                }
+            else if (e.keyCode === 38) { 
+                if (index >= 3 && index < 3 + cols) target = 0;
+                else if (index >= 3) target = index - cols;
             }
 
             if (items[target]) {
                 items[target].focus();
-                // Forzamos que el scroll siga al foco para Android TV
-                items[target].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                items[target].scrollIntoView({ behavior: 'smooth', block: 'center' });
                 if (current.tagName !== "INPUT") e.preventDefault();
             }
         });
