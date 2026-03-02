@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KARAOKE EL LORA</title>
+    <title>CINE EL LORA TV</title>
     <style>
         body { 
             font-family: sans-serif; 
-            /* Fondo base con gradiente fijo */
             background: linear-gradient(180deg, #000000 0%, #1a1100 70%, #332200 100%);
             background-attachment: fixed;
             color: white; 
@@ -16,15 +15,12 @@
             overflow-x: hidden;
         }
 
-        /* ENCABEZADO CON DEGRADADO ANIMADO */
         .header-container { 
             position: sticky; 
             top: 0; 
-            /* Colores que se mueven: Negro, Dorado oscuro y Chocolate */
             background: linear-gradient(-45deg, #1a1a1a, #4d3300, #1a1a1a, #664400);
             background-size: 400% 400%;
             animation: movimientoFondo 12s ease infinite;
-            
             padding: 20px 15px; 
             z-index: 9999; 
             border-bottom: 2px solid #ff9800; 
@@ -35,7 +31,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.8);
         }
 
-        /* Animación del fondo del encabezado */
         @keyframes movimientoFondo {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -48,14 +43,13 @@
             font-size: 1.3rem; 
             text-transform: uppercase;
             letter-spacing: 3px;
-            /* Brillo neón naranja en el texto */
             text-shadow: 0 0 10px #ff9800, 0 0 20px #ff9800;
             font-weight: bold;
         }
 
         .search-wrapper {
             display: flex;
-            gap: 20px; 
+            gap: 40px; 
             width: 95%; 
             max-width: 900px; 
             justify-content: center; 
@@ -73,6 +67,8 @@
             font-size: 0.9rem; 
             outline: none;
             transition: 0.3s;
+            text-align: left;
+            padding-left: 25px;
         }
 
         .btn-refresh {
@@ -92,7 +88,7 @@
             color: black;
             border: 2px solid #000000;
             border-radius: 25px;
-            padding: 12px 55px;
+            padding: 12px 25px;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
@@ -100,7 +96,6 @@
             transition: 0.3s;
         }
 
-        /* Efecto al seleccionar con el mando o ratón */
         #buscador:focus, .btn-refresh:focus, .btn-yt:focus, .btn-wise:focus {
             background-color: #ffffff !important;
             color: #000000 !important;
@@ -117,6 +112,8 @@
             padding: 25px;
             max-width: 1200px; 
             margin: 0 auto;
+            /* Espacio para que la primera fila no empiece debajo del header */
+            padding-top: 30px; 
         }
 
         .btn-wise {
@@ -130,6 +127,8 @@
             display: block; 
             text-align: left;
             transition: 0.3s;
+            /* AJUSTE CLAVE: Evita que el botón se esconda al enfocar con mando */
+            scroll-margin-top: 180px; 
         }
 
         .hidden { display: none !important; }
@@ -139,16 +138,17 @@
             #buscador { width: 90%; } 
             .search-wrapper { gap: 15px; flex-direction: column; }
             .btn-refresh, .btn-yt { width: 90%; text-align: center; }
+            .btn-wise { scroll-margin-top: 250px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="header-container">
+    <div class="header-container" id="miHeader">
         <h2>🇪🇸🇪🇸-🎤KARAOKE EL LORA🎤-🇪🇸🇪🇸</h2>
         <div class="search-wrapper">
-            <input type="text" id="buscador" class="nav" placeholder="BUSCAR CANCION O ARTISTA..." style="text-align: left; padding-left: 10px;" onkeyup="filtrar()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" id="buscador" class="nav" placeholder="BUSCAR CANCION O ARTISTA..." onkeyup="filtrar()">
+            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>
             <a class="btn-yt nav" href="https://www.youtube.com" target="_blank">YOUTUBE</a>
         </div>
     </div>
@@ -156,7 +156,6 @@
     <div class="grid-container" id="contenedor"></div>
 
     <script>
-        // 1. LISTA DE CANCIONES
         const canciones = [
             { titulo: "NOCHES DE BOHEMIA-NAVAJITA PLATEA", url: "https://m.youtube.com/watch?v=0IzWvEM6WTk" },
             { titulo: "A QUIEN LE IMPORTA-ALASCA", url: "https://m.youtube.com/watch?v=jqCyfmpMmO8" },
@@ -179,7 +178,7 @@
             { titulo: "YO QUIERO BAILAR-SONIA Y SELENA", url: "https://m.youtube.com/watch?v=Nc1YbpG0X6Y" },
             { titulo: "CUANDO TU VAS-CHENOA", url: "https://m.youtube.com/watch?v=WqTgMjFDNZc" },
             { titulo: "Y SI FUERA ELLA?-ALEJANDRO SANZ", url: "https://m.youtube.com/watch?t=13&v=a7HWFtn32bc" },
-            { titulo: "BAILAR PEGADOS-SERGIO DALMA", url: "https://m.youtube.com/watch?v=R32tR0AnPq0&list=RDR32tR0AnPq0&start_radio=1&pp=oAcB" },
+            { titulo: "BAILAR PEGADOS-SERGIO DALMA", url: "https://m.youtube.com/watch?v=R32tR0AnPq0" },
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
@@ -193,7 +192,6 @@
             ).join('');
         }
 
-        // 2. NAVEGACIÓN POR TECLADO / MANDO
         document.addEventListener('keydown', function(e) {
             const navItems = document.querySelectorAll('.nav');
             let current = document.activeElement;
@@ -211,19 +209,25 @@
             let grid = document.getElementById('contenedor');
             let cols = window.getComputedStyle(grid).getPropertyValue("grid-template-columns").split(" ").length;
 
-            if (e.keyCode === 39) target = index + 1; // Derecha
-            else if (e.keyCode === 37) target = index - 1; // Izquierda
-            else if (e.keyCode === 40) { // Abajo
+            if (e.keyCode === 39) target = index + 1; 
+            else if (e.keyCode === 37) target = index - 1; 
+            else if (e.keyCode === 40) { // ABAJO
                 if (index < 3) target = 3; 
                 else target = index + cols;
             }
-            else if (e.keyCode === 38) { // Arriba
-                if (index >= 3 && index < 3 + cols) target = 0;
-                else if (index >= 3) target = index - cols;
+            else if (e.keyCode === 38) { // ARRIBA
+                if (index >= 3 && index < 3 + cols) {
+                    target = 0; // Salta al buscador desde la primera fila
+                    window.scrollTo({ top: 0, behavior: 'smooth' }); // Asegura scroll arriba
+                } else if (index >= 3) {
+                    target = index - cols;
+                }
             }
 
             if (items[target]) {
                 items[target].focus();
+                // Forzamos que el scroll siga al foco para Android TV
+                items[target].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 if (current.tagName !== "INPUT") e.preventDefault();
             }
         });
@@ -241,6 +245,7 @@
             document.getElementById('buscador').value = "";
             filtrar();
             document.getElementById('buscador').focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         window.onload = () => {
