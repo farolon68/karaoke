@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CINE EL LORA TV</title>
+    <title>KARAOKE EL LORA</title>
     <style>
         body { 
             font-family: sans-serif; 
@@ -65,7 +65,7 @@
 
         #buscador {
             width: 220px; 
-            padding: 12px 20px; 
+            padding: 12px 100px; 
             border-radius: 25px; 
             border: 2px solid #ff9800;
             background: rgba(0,0,0,0.7); 
@@ -78,9 +78,9 @@
         .btn-refresh {
             background-color: #ff9800;
             color: black;
-            border: none;
+            border: 2px solid #000000;
             border-radius: 25px;
-            padding: 12px 25px;
+            padding: 13px 25px;
             font-weight: bold;
             cursor: pointer;
             white-space: nowrap;
@@ -89,10 +89,10 @@
 
         .btn-yt {
             background-color: #ff0000;
-            color: white;
-            border: none;
+            color: black;
+            border: 2px solid #000000;
             border-radius: 25px;
-            padding: 12px 25px;
+            padding: 12px 55px;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
@@ -147,8 +147,8 @@
     <div class="header-container">
         <h2>🇪🇸🇪🇸-🎤KARAOKE EL LORA🎤-🇪🇸🇪🇸</h2>
         <div class="search-wrapper">
-            <input type="text" id="buscador" class="nav" placeholder="BUSCAR CANCION O ARTISTA..." onkeyup="filtrar()">&nbsp;&nbsp;&nbsp;
-            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;&nbsp;&nbsp;
+            <input type="text" id="buscador" class="nav" placeholder="BUSCAR CANCION O ARTISTA..." style="text-align: left; padding-left: 10px;" onkeyup="filtrar()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <a class="btn-yt nav" href="https://www.youtube.com" target="_blank">YOUTUBE</a>
         </div>
     </div>
@@ -173,8 +173,12 @@
             { titulo: "SUPERESTRELLA-AITANA", url: "https://m.youtube.com/watch?v=JpcWs3xoFbY" },
             { titulo: "LA PERLA-ROSALIA", url: "https://m.youtube.com/watch?v=iOILOK_aDpQ" },
             { titulo: "TENIA TANTO QUE DARTE-NENA DACONTE", url: "https://m.youtube.com/watch?v=sHrnizfazKg" },
-            { titulo: "CUANDO ZARPA EL AMOR-CAMELA", url: "https://m.youtube.com/watch?v=NGlRWhmQb7Q" },
-            { titulo: "nombreautor", url: "link" },
+            { titulo: "CUANDO ZARPA EL AMOR-CAMELA", url: "https://m.youtube.com/watch?v=NGlRWhmQb7Q" },            
+            { titulo: "COMO CAMARON-ESTOPA", url: "https://m.youtube.com/watch?v=8k0Vm-Z1l7I" },
+            { titulo: "QUE LA DETENGAN-DAVID CIVERA", url: "https://m.youtube.com/watch?v=OPZ68H-8AAk" },
+            { titulo: "YO QUIERO BAILAR-SONIA Y SELENA", url: "https://m.youtube.com/watch?v=Nc1YbpG0X6Y" },
+            { titulo: "CUANDO TU VAS-CHENOA", url: "https://m.youtube.com/watch?v=WqTgMjFDNZc" },
+            { titulo: "Znombreautor", url: "link" },
         ];
 
         function cargarCanciones() {
