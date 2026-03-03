@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CINE EL LORA TV</title>
+    <title>KARAOKE "EL LORA"</title>
     <style>
         body { 
             font-family: sans-serif; 
@@ -136,7 +136,7 @@
 <body>
 
     <div class="header-container">
-        <h2>🎤🇪🇸-KARAOKE EL LORA-🇪🇸🎤</h2>
+        <h2>🎤🇪🇸-KARAOKE EL LORA-COLABORA:TITO CHAVES🇪🇸🎤</h2>
         <div class="search-wrapper">
             <input type="text" id="buscador" class="nav" placeholder="CANCION O ARTISTA....." onkeyup="filtrar()">&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -174,6 +174,29 @@
             { titulo: "EL TORO GUAPO-EL FARI", url: "vnd.youtube.com/watch?v=m8wgjXrIkk4" },            
             { titulo: "POROMPOMPERO-MANOLO ESCOBAR", url: "https://m.youtube.com/watch?v=fcWW4D4eeB4" },
             { titulo: "SOY MINERO-ANTONIO MOLINA", url: "https://m.youtube.com/watch?v=t-fqlDIGn00" },
+            { titulo: "ENTRE DOS TIERRAS-HEROES DEL SILENCIO", url: "https://m.youtube.com/watch?t=3&v=fBL5i-DuOog" },
+            { titulo: "20 DE ABRIL-CELTAS CORTOS", url: "https://m.youtube.com/watch?v=LcCyrEkiKrE" },
+            { titulo: "BIENVENIDOS-MIGUEL RIOS", url: "https://m.youtube.com/watch?v=R-oKjttMcT8" },
+            { titulo: "OLVIDAME Y PEGA LA VUELTA-PIMPINELA", url: "https://m.youtube.com/watch?v=cQWD8JZQPXE" },
+            { titulo: "Y COMO ES EL-JOSE LUIS PERALES", url: "https://m.youtube.com/watch?v=Imq8ep35e44" },
+            { titulo: "RESISTIRE-EL DUO DINAMICO", url: "https://m.youtube.com/watch?v=w_fNa783Smo" },
+            { titulo: "COMO UNA HOLA-ROCIO JURADO", url: "https://m.youtube.com/watch?v=2WTymE9Rfi8" },
+            { titulo: "COMO YO TE AMO-ROCIO JURADO", url: "https://m.youtube.com/watch?v=7rm6YOiJaeg" },
+            { titulo: "HAY PENA PENITA PENA-LOLA FLORES", url: "https://m.youtube.com/watch?v=Dt1iQVG7Ftc" },
+            { titulo: "HIJO DE LA LUNA-MECANO", url: "https://m.youtube.com/watch?v=VjNhDWjZnVY" },
+            { titulo: "CRUZ DE NAVAJAS-MECANO", url: "https://m.youtube.com/watch?v=POLSB7DVZ5g" },
+            { titulo: "MUJER CONTRA MUJER-MECANO", url: "https://m.youtube.com/watch?v=k4cngzwxr4M" },
+            { titulo: "ME CUESTA TANTO OLVIDARTE-MECANO", url: "https://m.youtube.com/watch?v=dKuu-KbPtiM" },
+            { titulo: "EUGENIO SALVADOR DALI-MECANO", url: "https://m.youtube.com/watch?v=sHKUPDxWXlY" },
+            { titulo: "EL 7 DE SEPTIEMBRE-MECANO", url: "https://m.youtube.com/watch?v=SOpONiiKJYI" },
+            { titulo: "Znombreautor", url: "link" },
+            { titulo: "Znombreautor", url: "link" },
+            { titulo: "Znombreautor", url: "link" },
+            { titulo: "Znombreautor", url: "link" },
+            { titulo: "Znombreautor", url: "link" },
+            { titulo: "Znombreautor", url: "link" },
+            { titulo: "Znombreautor", url: "link" },
+            { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
@@ -181,12 +204,20 @@
         ];
 
         function cargarCanciones() {
-            const contenedor = document.getElementById('contenedor');
-            canciones.sort((a, b) => a.titulo.localeCompare(b.titulo));
-            contenedor.innerHTML = canciones.map(c => 
-                `<a class="btn-wise nav" tabindex="0" href="${c.url}">${c.titulo}</a>`
-            ).join('');
-        }
+    const contenedor = document.getElementById('contenedor');
+    
+    // 1. Filtramos duplicados comparando el T�TULO y la URL
+    const listaUnica = Array.from(new Set(canciones.map(c => JSON.stringify(c))))
+        .map(c => JSON.parse(c));
+
+    // 2. Ordenamos la lista ya limpia
+    listaUnica.sort((a, b) => a.titulo.localeCompare(b.titulo));
+
+    // 3. Pintamos en el HTML
+    contenedor.innerHTML = listaUnica.map(c => 
+        `<a class="btn-wise nav" tabindex="0" href="${c.url}">${c.titulo}</a>`
+    ).join('');
+}
 
         document.addEventListener('keydown', function(e) {
             const navItems = document.querySelectorAll('.nav');
