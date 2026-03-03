@@ -74,7 +74,7 @@
             text-align: left;
         }
 
-        .btn-refresh, .btn-yt {
+        .btn-refresh, .btn-yt, .btn-fav {
             border: none;
             border-radius: 20px;
             padding: 10px 15px;
@@ -85,13 +85,15 @@
         }
 
         .btn-refresh { background-color: #ff9800; color: black; }
+        .btn-fav { background-color: #ffffff; color: black; }
         .btn-yt { background-color: #ff0000; color: white; text-decoration: none; }
 
-        #buscador:focus, .btn-refresh:focus, .btn-yt:focus, .btn-wise:focus {
+        #buscador:focus, .btn-refresh:focus, .btn-yt:focus, .btn-fav:focus, .btn-wise:focus, .btn-star:focus {
             background-color: #ffffff !important;
             color: #000000 !important;
             transform: scale(1.05);
             box-shadow: 0 0 15px white;
+            outline: none;
         }
 
         .grid-container {
@@ -100,51 +102,49 @@
             gap: 15px; 
             padding: 20px;
             max-width: 1200px; 
-            margin: 120px auto 0 auto;
+            margin: 120px auto 0 auto; 
         }
 
-        /* Contenedor relativo para la estrella */
-        .cancion-card { position: relative; display: block; }
+        /* CONTENEDOR PARA EL BOTON Y LA ESTRELLA */
+        .item-cancion {
+            display: flex;
+            align-items: center;
+            background-color: rgba(35, 35, 35, 0.9);
+            border-radius: 12px;
+            border: 1px solid #444;
+        }
 
         .btn-wise {
-            background-color: rgba(35, 35, 35, 0.9); 
+            flex: 1;
             color: white; 
-            padding: 20px 50px 20px 20px; 
+            padding: 20px; 
             text-decoration: none;
-            border-radius: 12px; 
             font-weight: bold; 
-            border: 1px solid #444;
             display: block; 
             text-align: left;
             transition: 0.3s;
-            scroll-margin-top: 200px;
+            border: none;
+            background: none;
         }
 
-        /* Estilo de la Estrella */
-        .fav-star {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.8rem;
-            color: rgba(255,255,255,0.2);
+        .btn-star {
+            background: none;
+            border: none;
+            color: #555;
+            font-size: 1.5rem;
+            padding: 0 15px;
             cursor: pointer;
-            z-index: 10;
-            transition: 0.3s;
-            user-select: none;
         }
 
-        .fav-star.active {
-            color: #ffeb3b;
-            text-shadow: 0 0 10px #ffeb3b;
-        }
+        .btn-star.es-fav { color: #ff9800; }
 
         .hidden { display: none !important; }
 
         @media (max-width: 600px) {
-            .grid-container { grid-template-columns: 1fr; margin-top: 220px; }
-            .header-container { width: 85%; }
-            #buscador { width: 100%; max-width: none; }
+            .grid-container { 
+                grid-template-columns: 1fr; 
+                margin-top: 220px; 
+            }
         }
     </style>
 </head>
@@ -154,6 +154,7 @@
         <h2>🎤🇪🇸-KARAOKE EL LORA-🇪🇸🎤</h2>
         <div class="search-wrapper">
             <input type="text" id="buscador" class="nav" placeholder="CANCION O ARTISTA....." onkeyup="filtrar()">
+            <button id="toggleFavs" class="btn-fav nav" onclick="verFavoritos()">⭐ FAVORITOS</button>
             <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>
             <a class="btn-yt nav" href="https://www.youtube.com" target="_blank">YOUTUBE</a>
         </div>
@@ -216,82 +217,102 @@
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
-]
+        ];
 
-        // Cargar favoritos del almacenamiento local
-        let favoritos = JSON.parse(localStorage.getItem('favs_karaoke')) || [];
+        let modoFavs = false;
+        let favoritos = JSON.parse(localStorage.getItem('mis_favs')) || [];
 
         function cargarCanciones() {
             const contenedor = document.getElementById('contenedor');
-            
-            // 1. Filtramos duplicados
-            const listaUnica = Array.from(new Set(canciones.map(c => JSON.stringify(c))))
-                .map(c => JSON.parse(c));
+            let listaAMostrar = modoFavs ? canciones.filter(c => favoritos.includes(c.titulo)) : canciones;
 
-            // 2. Ordenamos alfabéticamente
-            listaUnica.sort((a, b) => a.titulo.localeCompare(b.titulo));
+            listaAMostrar.sort((a, b) => a.titulo.localeCompare(b.titulo));
 
-            // 3. Pintamos en el HTML
-            contenedor.innerHTML = listaUnica.map(c => {
-                const esFav = favoritos.includes(c.titulo) ? 'active' : '';
-                // Si es fav, lo mandamos arriba con order: -1
-                const estiloFav = esFav ? 'style="order: -1; border: 1px solid #ffeb3b;"' : '';
-                
+            contenedor.innerHTML = listaAMostrar.map(c => {
+                const claseFav = favoritos.includes(c.titulo) ? 'es-fav' : '';
                 return `
-                    <div class="cancion-card" ${estiloFav}>
-                        <a class="btn-wise nav" tabindex="0" href="${c.url}">${c.titulo}</a>
-                        <span class="fav-star ${esFav}" onclick="toggleFav(event, '${c.titulo}')">★</span>
-                    </div>
-                `;
+                <div class="item-cancion nav-container">
+                    <a class="btn-wise nav" href="${c.url}">${c.titulo}</a>
+                    <button class="btn-star nav ${claseFav}" onclick="toggleFav('${c.titulo}', this)">★</button>
+                </div>`;
             }).join('');
         }
 
-        // Función para añadir/quitar de favoritos
-        function toggleFav(event, titulo) {
-            event.stopPropagation(); // Evita que se abra el link al dar a la estrella
+        function toggleFav(titulo, btn) {
             if (favoritos.includes(titulo)) {
                 favoritos = favoritos.filter(f => f !== titulo);
+                btn.classList.remove('es-fav');
             } else {
                 favoritos.push(titulo);
+                btn.classList.add('es-fav');
             }
-            localStorage.setItem('favs_karaoke', JSON.stringify(favoritos));
-            cargarCanciones(); // Refrescar vista
+            localStorage.setItem('mis_favs', JSON.stringify(favoritos));
         }
 
-        document.addEventListener('keydown', function(e) {
-            const navItems = document.querySelectorAll('.nav');
-            let current = document.activeElement;
-            let items = Array.from(navItems).filter(i => i.offsetParent !== null);
-            let index = items.indexOf(current);
+        function verFavoritos() {
+            modoFavs = !modoFavs;
+            const btn = document.getElementById('toggleFavs');
+            btn.innerText = modoFavs ? "👁 VER TODO" : "⭐ FAVORITOS";
+            btn.style.backgroundColor = modoFavs ? "#ffffff" : "#ffffff"; // Mantiene tu estilo original
+            
+            cargarCanciones();
 
-            if (e.keyCode === 13) { current.click(); return; }
-            if (index === -1) return;
+            // ARREGLO FOCO TV: Forzamos el foco al mismo botón y NO al buscador
+            setTimeout(() => {
+                btn.focus();
+            }, 100);
+        }
 
-            let target = index;
-            let grid = document.getElementById('contenedor');
-            let cols = window.getComputedStyle(grid).getPropertyValue("grid-template-columns").split(" ").length;
+        // --- SUSTITUYE TODA TU FUNCIÓN DE KEYDOWN POR ESTA ---
+document.addEventListener('keydown', function(e) {
+    const navItems = document.querySelectorAll('.nav');
+    let current = document.activeElement;
+    let items = Array.from(navItems).filter(i => i.offsetParent !== null); // Solo los visibles
+    let index = items.indexOf(current);
 
-            if (e.keyCode === 39) target = index + 1; 
-            else if (e.keyCode === 37) target = index - 1; 
-            else if (e.keyCode === 40) { 
-                if (index < 3) target = 3; 
-                else target = index + cols;
-            }
-            else if (e.keyCode === 38) { 
-                if (index >= 3 && index < 3 + cols) target = 0;
-                else if (index >= 3) target = index - cols;
-            }
+    if (e.keyCode === 13) return; // Enter normal
+    if (index === -1) return;
 
-            if (items[target]) {
-                items[target].focus();
-                items[target].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                if (current.tagName !== "INPUT") e.preventDefault();
-            }
+    let target = -1;
+    const rectActual = current.getBoundingClientRect();
+
+    if (e.keyCode === 39) { // DERECHA
+        target = index + 1;
+    } 
+    else if (e.keyCode === 37) { // IZQUIERDA
+        target = index - 1;
+    } 
+    else if (e.keyCode === 40) { // ABAJO (Busca el más cercano debajo)
+        target = items.findIndex((item, i) => {
+            const r = item.getBoundingClientRect();
+            return i > index && r.top > rectActual.top + 10 && Math.abs(r.left - rectActual.left) < 50;
         });
+        // Si no encuentra uno justo debajo, busca el primero de la siguiente fila
+        if (target === -1) target = items.findIndex((item, i) => i > index && item.getBoundingClientRect().top > rectActual.top + 10);
+    } 
+    else if (e.keyCode === 38) { // ARRIBA (Busca el más cercano arriba)
+        for (let i = index - 1; i >= 0; i--) {
+            const r = items[i].getBoundingClientRect();
+            if (r.top < rectActual.top - 10 && Math.abs(r.left - rectActual.left) < 50) {
+                target = i;
+                break;
+            }
+        }
+        // Si no encuentra uno justo arriba, salta al primer elemento del header
+        if (target === -1 && index >= 4) target = 0; 
+    }
+
+    if (items[target]) {
+        items[target].focus();
+        items[target].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        e.preventDefault();
+    }
+});
+
 
         function filtrar() {
             let q = document.getElementById('buscador').value.toUpperCase();
-            let b = document.getElementsByClassName('cancion-card');
+            let b = document.getElementsByClassName('item-cancion');
             for (let i = 0; i < b.length; i++) {
                 let texto = b[i].innerText.toUpperCase();
                 b[i].classList.toggle('hidden', texto.indexOf(q) === -1);
@@ -300,9 +321,11 @@
 
         function resetear() {
             document.getElementById('buscador').value = "";
+            modoFavs = false;
+            document.getElementById('toggleFavs').innerText = "⭐ FAVORITOS";
             filtrar();
+            cargarCanciones();
             document.getElementById('buscador').focus();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         window.onload = () => {
@@ -312,3 +335,4 @@
     </script>
 </body>
 </html>
+
