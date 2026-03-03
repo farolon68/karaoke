@@ -15,23 +15,20 @@
             overflow-x: hidden;
         }
 
-        /* ENCABEZADO ENVOLVENTE (CUADRO FLOTANTE) */
         .header-container { 
-            position: fixed; /* Ahora es fijo para que los botones suban por detrás */
+            position: fixed; 
             top: 15px; 
             left: 50%;
-            transform: translateX(-50%); /* Lo centra perfectamente */
-            width: 90%; /* No ocupa todo el ancho para que se vea el fondo por los lados */
-            max-width: 600px; /* Tamaño de "cuadro" */
-            
+            transform: translateX(-50%); 
+            width: 90%; 
+            max-width: 600px; 
             background: linear-gradient(-45deg, #1a1a1a, #4d3300, #1a1a1a, #664400);
             background-size: 400% 400%;
             animation: movimientoFondo 12s ease infinite;
-            
             padding: 15px; 
             z-index: 9999; 
-            border: 2px solid #ff9800; /* Marco completo */
-            border-radius: 20px; /* Bordes redondeados de cuadro */
+            border: 2px solid #ff9800; 
+            border-radius: 20px; 
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -97,20 +94,22 @@
             box-shadow: 0 0 15px white;
         }
 
-        /* EL GRID AHORA TIENE MARGEN SUPERIOR PARA NO EMPEZAR DEBAJO DEL CUADRO */
         .grid-container {
             display: grid; 
             grid-template-columns: repeat(3, 1fr);
             gap: 15px; 
             padding: 20px;
             max-width: 1200px; 
-            margin: 120px auto 0 auto; /* Espacio para el cuadro flotante */
+            margin: 120px auto 0 auto;
         }
+
+        /* Contenedor relativo para la estrella */
+        .cancion-card { position: relative; display: block; }
 
         .btn-wise {
             background-color: rgba(35, 35, 35, 0.9); 
             color: white; 
-            padding: 20px; 
+            padding: 20px 50px 20px 20px; 
             text-decoration: none;
             border-radius: 12px; 
             font-weight: bold; 
@@ -118,16 +117,32 @@
             display: block; 
             text-align: left;
             transition: 0.3s;
-            scroll-margin-top: 200px; /* Para que al enfocar no quede detrás del cuadro */
+            scroll-margin-top: 200px;
+        }
+
+        /* Estilo de la Estrella */
+        .fav-star {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.8rem;
+            color: rgba(255,255,255,0.2);
+            cursor: pointer;
+            z-index: 10;
+            transition: 0.3s;
+            user-select: none;
+        }
+
+        .fav-star.active {
+            color: #ffeb3b;
+            text-shadow: 0 0 10px #ffeb3b;
         }
 
         .hidden { display: none !important; }
 
         @media (max-width: 600px) {
-            .grid-container { 
-                grid-template-columns: 1fr; 
-                margin-top: 220px; /* Más espacio en móvil vertical */
-            }
+            .grid-container { grid-template-columns: 1fr; margin-top: 220px; }
             .header-container { width: 85%; }
             #buscador { width: 100%; max-width: none; }
         }
@@ -136,10 +151,10 @@
 <body>
 
     <div class="header-container">
-        <h2>🎤🇪🇸-KARAOKE EL LORA-COLABORA:TITO CHAVES🇪🇸🎤</h2>
+        <h2>🎤🇪🇸-KARAOKE EL LORA-🇪🇸🎤</h2>
         <div class="search-wrapper">
-            <input type="text" id="buscador" class="nav" placeholder="CANCION O ARTISTA....." onkeyup="filtrar()">&nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" id="buscador" class="nav" placeholder="CANCION O ARTISTA....." onkeyup="filtrar()">
+            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>
             <a class="btn-yt nav" href="https://www.youtube.com" target="_blank">YOUTUBE</a>
         </div>
     </div>
@@ -201,23 +216,47 @@
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
-        ];
+]
+
+        // Cargar favoritos del almacenamiento local
+        let favoritos = JSON.parse(localStorage.getItem('favs_karaoke')) || [];
 
         function cargarCanciones() {
-    const contenedor = document.getElementById('contenedor');
-    
-    // 1. Filtramos duplicados comparando el T�TULO y la URL
-    const listaUnica = Array.from(new Set(canciones.map(c => JSON.stringify(c))))
-        .map(c => JSON.parse(c));
+            const contenedor = document.getElementById('contenedor');
+            
+            // 1. Filtramos duplicados
+            const listaUnica = Array.from(new Set(canciones.map(c => JSON.stringify(c))))
+                .map(c => JSON.parse(c));
 
-    // 2. Ordenamos la lista ya limpia
-    listaUnica.sort((a, b) => a.titulo.localeCompare(b.titulo));
+            // 2. Ordenamos alfabéticamente
+            listaUnica.sort((a, b) => a.titulo.localeCompare(b.titulo));
 
-    // 3. Pintamos en el HTML
-    contenedor.innerHTML = listaUnica.map(c => 
-        `<a class="btn-wise nav" tabindex="0" href="${c.url}">${c.titulo}</a>`
-    ).join('');
-}
+            // 3. Pintamos en el HTML
+            contenedor.innerHTML = listaUnica.map(c => {
+                const esFav = favoritos.includes(c.titulo) ? 'active' : '';
+                // Si es fav, lo mandamos arriba con order: -1
+                const estiloFav = esFav ? 'style="order: -1; border: 1px solid #ffeb3b;"' : '';
+                
+                return `
+                    <div class="cancion-card" ${estiloFav}>
+                        <a class="btn-wise nav" tabindex="0" href="${c.url}">${c.titulo}</a>
+                        <span class="fav-star ${esFav}" onclick="toggleFav(event, '${c.titulo}')">★</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Función para añadir/quitar de favoritos
+        function toggleFav(event, titulo) {
+            event.stopPropagation(); // Evita que se abra el link al dar a la estrella
+            if (favoritos.includes(titulo)) {
+                favoritos = favoritos.filter(f => f !== titulo);
+            } else {
+                favoritos.push(titulo);
+            }
+            localStorage.setItem('favs_karaoke', JSON.stringify(favoritos));
+            cargarCanciones(); // Refrescar vista
+        }
 
         document.addEventListener('keydown', function(e) {
             const navItems = document.querySelectorAll('.nav');
@@ -252,7 +291,7 @@
 
         function filtrar() {
             let q = document.getElementById('buscador').value.toUpperCase();
-            let b = document.getElementsByClassName('btn-wise');
+            let b = document.getElementsByClassName('cancion-card');
             for (let i = 0; i < b.length; i++) {
                 let texto = b[i].innerText.toUpperCase();
                 b[i].classList.toggle('hidden', texto.indexOf(q) === -1);
@@ -273,4 +312,3 @@
     </script>
 </body>
 </html>
-
