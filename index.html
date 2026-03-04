@@ -16,25 +16,25 @@
         }
 
         .header-container { 
-            position: fixed; 
-            top: 15px; 
-            left: 50%;
-            transform: translateX(-50%); 
-            width: 90%; 
-            max-width: 700px; 
-            background: linear-gradient(-45deg, #1a1a1a, #4d3300, #1a1a1a, #664400);
-            background-size: 400% 400%;
-            animation: movimientoFondo 12s ease infinite;
-            padding: 15px; 
-            z-index: 9999; 
-            border: 2px solid #ff9800; 
-            border-radius: 20px; 
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
-        }
+    position: fixed; 
+    top: 15px; 
+    left: 50%;
+    transform: translateX(-50%); 
+    width: 95%; /* Subimos un poco el ancho */
+    max-width: 950px; /* <--- ANTES 700px. Ahora el contenedor es más ancho */
+    background: linear-gradient(-45deg, #1a1a1a, #4d3300, #1a1a1a, #664400);
+    background-size: 400% 400%;
+    animation: movimientoFondo 12s ease infinite;
+    padding: 15px; 
+    z-index: 9999; 
+    border: 2px solid #ff9800; 
+    border-radius: 20px; 
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+}
 
         @keyframes movimientoFondo {
             0% { background-position: 0% 50%; }
@@ -62,17 +62,17 @@
         }
 
         #buscador {
-            flex: 1 1 150px;
-            max-width: 350px;
-            padding: 10px 15px; 
-            border-radius: 20px; 
-            border: 2px solid #ff9800;
-            background: rgba(0,0,0,0.8); 
-            color: white; 
-            font-size: 0.85rem; 
-            outline: none;
-            text-align: left;
-        }
+    flex: 2; /* Le damos más peso frente a los otros botones */
+    max-width: 500px; /* <--- ANTES 350px. Ahora el buscador puede estirarse más */
+    padding: 10px 15px; 
+    border-radius: 20px; 
+    border: 2px solid #ff9800;
+    background: rgba(0,0,0,0.8); 
+    color: white; 
+    font-size: 0.85rem; 
+    outline: none;
+    text-align: left;
+}
 
         .btn-refresh, .btn-yt, .btn-fav {
             border: none;
@@ -136,9 +136,9 @@
     <div class="header-container">
         <h2>🎤🇪🇸-KARAOKE EL LORA-🇪🇸🎤</h2>
         <div class="search-wrapper">
-            <input type="text" id="buscador" class="nav" placeholder="CANCION O ARTISTA....." onkeyup="filtrar()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="toggleFavs" class="btn-fav nav" onclick="verFavoritos()">⭐ FAVORITOS</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" id="buscador" class="nav" placeholder="BUSCAR CANCION O ARTISTA............." onkeyup="filtrar()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="toggleFavs" class="btn-fav nav" onclick="verFavoritos()">⭐ FAVORITOS</button>&nbsp;&nbsp;
+            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;&nbsp;
             <a class="btn-yt nav" href="https://www.youtube.com" target="_blank">YOUTUBE</a>
         </div>
     </div>
@@ -188,11 +188,11 @@
             { titulo: "ME CUESTA TANTO OLVIDARTE-MECANO", url: "https://m.youtube.com/watch?v=dKuu-KbPtiM" },
             { titulo: "EUGENIO SALVADOR DALI-MECANO", url: "https://m.youtube.com/watch?v=sHKUPDxWXlY" },
             { titulo: "EL 7 DE SEPTIEMBRE-MECANO", url: "https://m.youtube.com/watch?v=SOpONiiKJYI" },
-            { titulo: "Znombreautor", url: "link" },
-            { titulo: "Znombreautor", url: "link" },
-            { titulo: "Znombreautor", url: "link" },
-            { titulo: "Znombreautor", url: "link" },
-            { titulo: "Znombreautor", url: "link" },
+            { titulo: "NO DUDARIA-ANTONIO FLORES", url: "https://m.youtube.com/watch?v=iykhVjHHQqA" },
+            { titulo: "PONGAMOS QUE HABLO DE MADRID-SABINA", url: "https://m.youtube.com/watch?v=FQ6hvjDXrCw" },
+            { titulo: "7 VIDAS TIENE UN GATO-ANTONIO FLORES", url: "https://m.youtube.com/watch?v=ndewfaZHwrM" },
+            { titulo: "SI ME DAS A ELEGIR-LOS CHUNGUITOS", url: "https://m.youtube.com/watch?v=FKQW--LvgUs" },
+            { titulo: "LAS KETCHUP ", url: "https://m.youtube.com/watch?v=PoEKHZ_pSu4" },
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
             { titulo: "Znombreautor", url: "link" },
