@@ -348,13 +348,33 @@ document.addEventListener('keydown', function(e) {
 
 
         function filtrar() {
-            let q = document.getElementById('buscador').value.toUpperCase();
-            let b = document.getElementsByClassName('item-cancion');
-            for (let i = 0; i < b.length; i++) {
-                let texto = b[i].innerText.toUpperCase();
-                b[i].classList.toggle('hidden', texto.indexOf(q) === -1);
-            }
+    var cajaTexto = document.getElementById('buscador');
+    var textoEscrito = cajaTexto.value.toLowerCase();
+    
+    // Función para limpiar acentos letra por letra
+    var limpiarTexto = function(str) {
+        return str.toLowerCase()
+            .replace(/á/g, "a").replace(/é/g, "e")
+            .replace(/í/g, "i").replace(/ó/g, "o")
+            .replace(/ú/g, "u");
+    };
+
+    var busquedaLimpia = limpiarTexto(textoEscrito);
+    var listaDeCanciones = document.getElementsByClassName('item-cancion');
+
+    for (var i = 0; i < listaDeCanciones.length; i++) {
+        var tituloCancion = listaDeCanciones[i].innerText || "";
+        var tituloLimpio = limpiarTexto(tituloCancion);
+
+        // Si el título contiene lo que hemos escrito, lo mostramos
+        if (tituloLimpio.indexOf(busquedaLimpia) !== -1) {
+            listaDeCanciones[i].classList.remove('hidden');
+        } else {
+            listaDeCanciones[i].classList.add('hidden');
         }
+    }
+}
+
 
         function resetear() {
             document.getElementById('buscador').value = "";
