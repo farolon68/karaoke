@@ -134,6 +134,8 @@
 <body>
 
     <div class="header-container">
+    <div id="fecha" style="position: absolute; top: 15px; left: 20px; font-size: 1rem; color: #ff9800; font-weight: bold;"></div>
+    <div id="reloj" style="position: absolute; top: 15px; right: 20px; font-size: 1rem; color: #ff9800; font-weight: bold;"></div>
         <h2>🎤🇪🇸-KARAOKE EL LORA-🇪🇸🎤</h2>
         <div class="search-wrapper">
             <input type="text" id="buscador" class="nav" placeholder="BUSCAR CANCION O ARTISTA............." onkeyup="filtrar()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -331,6 +333,24 @@ document.addEventListener('keydown', function(e) {
             cargarCanciones();
             document.getElementById('buscador').focus();
         };
+        function actualizarRelojYFecha() {
+    const ahora = new Date();
+    
+    // Formato Fecha: DD/MM/AAAA
+    const dia = String(ahora.getDate()).padStart(2, '0');
+    const mes = String(ahora.getMonth() + 1).padStart(2, '0'); // Meses van de 1-12
+    const anio = ahora.getFullYear();
+    document.getElementById('fecha').innerText = `${dia}/${mes}/${anio}`;
+
+    // Formato Hora: HH:MM
+    const horas = String(ahora.getHours()).padStart(2, '0');
+    const minutos = String(ahora.getMinutes()).padStart(2, '0');
+    document.getElementById('reloj').innerText = `${horas}:${minutos}`;
+}
+
+// Ejecutar cada segundo
+setInterval(actualizarRelojYFecha, 1000);
+actualizarRelojYFecha(); // Ejecución inicial
     </script>
 </body>
 </html>
