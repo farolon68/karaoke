@@ -16,25 +16,25 @@
         }
 
         .header-container { 
-            position: fixed; 
-            top: 15px; 
-            left: 50%;
-            transform: translateX(-50%); 
-            width: 95%; 
-            max-width: 950px; 
-            background: linear-gradient(-45deg, #1a1a1a, #4d3300, #1a1a1a, #664400);
-            background-size: 400% 400%;
-            animation: movimientoFondo 12s ease infinite;
-            padding: 15px; 
-            z-index: 9999; 
-            border: 2px solid #ff9800; 
-            border-radius: 20px; 
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
-        }
+    position: fixed; 
+    top: 15px; 
+    left: 50%;
+    transform: translateX(-50%); 
+    width: 95%; /* Subimos un poco el ancho */
+    max-width: 950px; /* <--- ANTES 700px. Ahora el contenedor es más ancho */
+    background: linear-gradient(-45deg, #1a1a1a, #4d3300, #1a1a1a, #664400);
+    background-size: 400% 400%;
+    animation: movimientoFondo 12s ease infinite;
+    padding: 15px; 
+    z-index: 9999; 
+    border: 2px solid #ff9800; 
+    border-radius: 20px; 
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+}
 
         @keyframes movimientoFondo {
             0% { background-position: 0% 50%; }
@@ -44,7 +44,7 @@
 
         h2 { 
             color: #ffffff; 
-            margin: 25px 0 10px 0; 
+            margin: 0 0 10px 0; 
             font-size: 1.1rem; 
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -62,17 +62,17 @@
         }
 
         #buscador {
-            flex: 2; 
-            max-width: 500px; 
-            padding: 10px 15px; 
-            border-radius: 20px; 
-            border: 2px solid #ff9800;
-            background: rgba(0,0,0,0.8); 
-            color: white; 
-            font-size: 0.85rem; 
-            outline: none;
-            text-align: left;
-        }
+    flex: 2; /* Le damos más peso frente a los otros botones */
+    max-width: 500px; /* <--- ANTES 350px. Ahora el buscador puede estirarse más */
+    padding: 10px 15px; 
+    border-radius: 20px; 
+    border: 2px solid #ff9800;
+    background: rgba(0,0,0,0.8); 
+    color: white; 
+    font-size: 0.85rem; 
+    outline: none;
+    text-align: left;
+}
 
         .btn-refresh, .btn-yt, .btn-fav {
             border: none;
@@ -88,36 +88,13 @@
         .btn-fav { background-color: #ffffff; color: black; }
         .btn-yt { background-color: #ff0000; color: white; text-decoration: none; }
 
-        /* FOCO PARA TV */
-        .nav:focus, .btn-wise:focus, .btn-star:focus {
+        #buscador:focus, .btn-refresh:focus, .btn-yt:focus, .btn-fav:focus, .btn-wise:focus, .btn-star:focus {
             background-color: #ffffff !important;
             color: #000000 !important;
             transform: scale(1.05);
             box-shadow: 0 0 15px white;
             outline: none;
         }
-
-       #btn-micro {
-    vertical-align: middle;
-    line-height: 1;
-    transition: 0.3s;
-}
-
-#btn-micro:focus {
-    transform: scale(1.3);
-    filter: drop-shadow(0 0 10px #ff9800);
-    outline: none;
-}
-
-/* ESTO DEVUELVE EL ALTO ORIGINAL AL ENCABEZADO */
-.header-container {
-    padding: 10px 15px !important; /* Estrecha el cuadro */
-}
-
-h2 {
-    margin: 5px 0 10px 0 !important; /* Sube el título */
-}
-
 
         .grid-container {
             display: grid; 
@@ -128,29 +105,10 @@ h2 {
             margin: 120px auto 0 auto; 
         }
 
-        .item-cancion { 
-            display: flex; 
-            align-items: center; 
-            background-color: #6a1b9a; 
-            border-radius: 15px; 
-            border: 1px solid #9c27b0; 
-            margin-bottom: 5px; 
-            overflow: hidden; 
-        }
+        /* CONTENEDOR PARA EL BOTON Y LA ESTRELLA */
+       .item-cancion { display: flex; align-items: center; background-color: #6a1b9a; /* <--- COLOR MORADO */ border-radius: 15px; /* <--- BORDES REDONDOS */ border: 1px solid #9c27b0; /* Borde opcional para que resalte */ margin-bottom: 5px; /* Espacio entre botones */ overflow: hidden; }
 
-        .btn-wise { 
-            flex: 1; 
-            color: white; 
-            padding: 20px 35px; 
-            font-size: 1.05rem; 
-            text-decoration: none; 
-            font-weight: bold; 
-            display: block; 
-            text-align: left; 
-            transition: 0.3s; 
-            border: none; 
-            background: none; 
-        }
+        .btn-wise { flex: 1; color: white; padding: 20px 35px; font-size: 1.05rem; text-decoration: none; font-weight: bold; display: block; text-align: left; transition: 0.3s; border: none; /* Quitamos el borde individual */ background: none; /* Quitamos el fondo individual */ }
 
         .btn-star {
             background: none;
@@ -168,7 +126,7 @@ h2 {
         @media (max-width: 600px) {
             .grid-container { 
                 grid-template-columns: 1fr; 
-                margin-top: 250px; 
+                margin-top: 220px; 
             }
         }
     </style>
@@ -176,25 +134,15 @@ h2 {
 <body>
 
     <div class="header-container">
-        <!-- FECHA Y RELOJ -->
-        <div id="fecha" style="position: absolute; top: 15px; left: 20px; font-size: 1rem; color: #ff9800; font-weight: bold;"></div>
-        <div id="reloj" style="position: absolute; top: 15px; right: 20px; font-size: 1rem; color: #ff9800; font-weight: bold;"></div>
-        
+    <div id="fecha" style="position: absolute; top: 15px; left: 20px; font-size: 1rem; color: #ff9800; font-weight: bold;"></div>
+    <div id="reloj" style="position: absolute; top: 15px; right: 20px; font-size: 1rem; color: #ff9800; font-weight: bold;"></div>
         <h2>🎤🇪🇸-KARAOKE EL LORA-🇪🇸🎤</h2>
-        
-        <div class="search-wrapper" style="position: relative;">
-    <input type="text" id="buscador" class="nav" placeholder="BUSCAR CANCION O ARTISTA............." onkeyup="filtrar()">
-    
-    <!-- MICRO A LA DERECHA DEL BUSCADOR -->
-    <button id="btn-micro" class="nav" onclick="dictar()" 
-        style="background: none; border: none; font-size: 1.2rem; cursor: pointer; margin-left: -40px; z-index: 10; padding: 5px;">🎙️</button>
-    
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!-- Espacio tras el micro -->
-    <button id="toggleFavs" class="btn-fav nav" onclick="verFavoritos()">⭐ FAVORITOS</button>&nbsp;
-    <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;
-    <a class="btn-yt nav" href="https://www.youtube.com" target="_blank">YOUTUBE</a>
-</div>
-
+        <div class="search-wrapper">
+            <input type="text" id="buscador" class="nav" placeholder="BUSCAR CANCION O ARTISTA............." onkeyup="filtrar()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="toggleFavs" class="btn-fav nav" onclick="verFavoritos()">⭐ FAVORITOS</button>&nbsp;&nbsp;
+            <button class="btn-refresh nav" onclick="resetear()">REFRESCAR</button>&nbsp;&nbsp;
+            <a class="btn-yt nav" href="https://www.youtube.com" target="_blank">YOUTUBE</a>
+        </div>
     </div>
 
     <div class="grid-container" id="contenedor"></div>
@@ -403,45 +351,6 @@ document.addEventListener('keydown', function(e) {
 // Ejecutar cada segundo
 setInterval(actualizarRelojYFecha, 1000);
 actualizarRelojYFecha(); // Ejecución inicial
-function dictar() {
-    const btnMicro = document.getElementById('btn-micro');
-    const buscador = document.getElementById('buscador');
-    
-    // Comprobamos si el navegador soporta voz
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
-    if (!Recognition) {
-        alert("Tu navegador no soporta búsqueda por voz.");
-        return;
-    }
-
-    const reconocimiento = new Recognition();
-    reconocimiento.lang = 'es-ES'; // Idioma español
-    reconocimiento.interimResults = false;
-
-    reconocimiento.onstart = () => {
-        btnMicro.innerText = "🔴"; // Cambia a círculo rojo mientras escucha
-    };
-
-    reconocimiento.onresult = (event) => {
-        const vozATexto = event.results[0][0].transcript;
-        buscador.value = vozATexto.toUpperCase(); // Escribe lo que dijiste
-        btnMicro.innerText = "🎙️"; // Vuelve al micro normal
-        filtrar(); // Llama a tu función de filtrar automáticamente
-    };
-
-    reconocimiento.onerror = () => {
-        btnMicro.innerText = "🎙️";
-        alert("Error al escuchar. Revisa el permiso del micro.");
-    };
-
-    reconocimiento.onend = () => {
-        btnMicro.innerText = "🎙️";
-    };
-
-    reconocimiento.start(); // ¡Empieza a escuchar!
-}
-
     </script>
 </body>
 </html>
