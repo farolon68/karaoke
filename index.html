@@ -347,13 +347,37 @@ document.addEventListener('keydown', function(e) {
 
 
         function filtrar() {
-            let q = document.getElementById('buscador').value.toUpperCase();
-            let b = document.getElementsByClassName('item-cancion');
-            for (let i = 0; i < b.length; i++) {
-                let texto = b[i].innerText.toUpperCase();
-                b[i].classList.toggle('hidden', texto.indexOf(q) === -1);
-            }
+    var input = document.getElementById('buscador');
+    var valor = input.value.toLowerCase();
+    
+    // Función "Blindada" que limpia acentos usando códigos universales
+    function limpiarTexto(t) {
+        if (!t) return "";
+        var s = t.toLowerCase();
+        s = s.replace(/[áàäâ]/g, "a");
+        s = s.replace(/[éèëê]/g, "e");
+        s = s.replace(/[íìïî]/g, "i");
+        s = s.replace(/[óòöô]/g, "o");
+        s = s.replace(/[úùüû]/g, "u");
+        return s;
+    }
+
+    var busqueda = limpiarTexto(valor);
+    var canciones = document.getElementsByClassName('item-cancion');
+
+    for (var i = 0; i < canciones.length; i++) {
+        // Obtenemos el texto de la canción (el enlace + la estrella)
+        var titulo = canciones[i].textContent || canciones[i].innerText || "";
+        var tituloLimpio = limpiarTexto(titulo);
+
+        // Si la búsqueda está vacía o el título contiene la búsqueda
+        if (busqueda === "" || tituloLimpio.indexOf(busqueda) !== -1) {
+            canciones[i].classList.remove('hidden');
+        } else {
+            canciones[i].classList.add('hidden');
         }
+    }
+}
 
         function resetear() {
             document.getElementById('buscador').value = "";
