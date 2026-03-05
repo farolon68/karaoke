@@ -13,28 +13,30 @@
             margin: 0; 
             padding: 0; 
             overflow-x: hidden;
+            /* Inicia el contador */
+            counter-reset: cancion-numero;
         }
 
         .header-container { 
-    position: fixed; 
-    top: 15px; 
-    left: 50%;
-    transform: translateX(-50%); 
-    width: 95%; /* Subimos un poco el ancho */
-    max-width: 950px; /* <--- ANTES 700px. Ahora el contenedor es más ancho */
-    background: linear-gradient(-45deg, #1a1a1a, #4d3300, #1a1a1a, #664400);
-    background-size: 400% 400%;
-    animation: movimientoFondo 12s ease infinite;
-    padding: 15px; 
-    z-index: 9999; 
-    border: 2px solid #ff9800; 
-    border-radius: 20px; 
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
-}
+            position: fixed; 
+            top: 15px; 
+            left: 50%;
+            transform: translateX(-50%); 
+            width: 95%; 
+            max-width: 950px; 
+            background: linear-gradient(-45deg, #1a1a1a, #4d3300, #1a1a1a, #664400);
+            background-size: 400% 400%;
+            animation: movimientoFondo 12s ease infinite;
+            padding: 15px; 
+            z-index: 9999; 
+            border: 2px solid #ff9800; 
+            border-radius: 20px; 
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+        }
 
         @keyframes movimientoFondo {
             0% { background-position: 0% 50%; }
@@ -62,17 +64,17 @@
         }
 
         #buscador {
-    flex: 2; /* Le damos más peso frente a los otros botones */
-    max-width: 500px; /* <--- ANTES 350px. Ahora el buscador puede estirarse más */
-    padding: 10px 15px; 
-    border-radius: 20px; 
-    border: 2px solid #ff9800;
-    background: rgba(0,0,0,0.8); 
-    color: white; 
-    font-size: 0.85rem; 
-    outline: none;
-    text-align: left;
-}
+            flex: 2; 
+            max-width: 500px; 
+            padding: 10px 15px; 
+            border-radius: 20px; 
+            border: 2px solid #ff9800;
+            background: rgba(0,0,0,0.8); 
+            color: white; 
+            font-size: 0.85rem; 
+            outline: none;
+            text-align: left;
+        }
 
         .btn-refresh, .btn-yt, .btn-fav {
             border: none;
@@ -106,9 +108,30 @@
         }
 
         /* CONTENEDOR PARA EL BOTON Y LA ESTRELLA */
-       .item-cancion { display: flex; align-items: center; background-color: #6a1b9a; /* <--- COLOR MORADO */ border-radius: 15px; /* <--- BORDES REDONDOS */ border: 1px solid #9c27b0; /* Borde opcional para que resalte */ margin-bottom: 5px; /* Espacio entre botones */ overflow: hidden; }
+       .item-cancion { display: flex; align-items: center; background-color: #6a1b9a; border-radius: 15px; border: 1px solid #9c27b0; margin-bottom: 5px; overflow: hidden; }
 
-        .btn-wise { flex: 1; color: white; padding: 20px 35px; font-size: 1.05rem; text-decoration: none; font-weight: bold; display: block; text-align: left; transition: 0.3s; border: none; /* Quitamos el borde individual */ background: none; /* Quitamos el fondo individual */ }
+        .btn-wise { 
+            flex: 1; 
+            color: white; 
+            padding: 20px 35px; 
+            font-size: 1.05rem; 
+            text-decoration: none; 
+            font-weight: bold; 
+            display: block; 
+            text-align: left; 
+            transition: 0.3s; 
+            border: none; 
+            background: none; 
+            /* Suma 1 al contador por cada botón */
+            counter-increment: cancion-numero;
+        }
+
+        /* Inserta el número antes del texto */
+        .btn-wise::before {
+            content: counter(cancion-numero) ". ";
+            margin-right: 10px;
+            color: #ff9800; /* Naranja para que combine con tu estética */
+        }
 
         .btn-star {
             background: none;
