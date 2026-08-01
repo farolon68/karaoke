@@ -152,6 +152,130 @@
                 margin-top: 220px; 
             }
         }
+
+        /* --- BOTON FLOTANTE AÑADIR PENDIENTE --- */
+        .btn-add-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(-45deg, #ff9800, #664400);
+            color: black;
+            border: 2px solid #ffffff;
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .badge-pendientes {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #d32f2f;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid black;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .modal-box {
+            background: #1a1100;
+            border: 2px solid #ff9800;
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 550px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(255,152,0,0.5);
+        }
+
+        .modal-box h3 {
+            color: #ff9800;
+            margin-top: 0;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .modal-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 2px solid #ff9800;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            min-width: 100px;
+            border: none;
+            border-radius: 12px;
+            padding: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-guardar-pend { background: #ff9800; color: black; }
+        .btn-copiar-pend { background: #4caf50; color: white; }
+        .btn-vaciar-pend { background: #d32f2f; color: white; }
+        .btn-cerrar-pend { background: #555; color: white; }
+
+        .textarea-pendientes {
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 150px;
+            background: rgba(0,0,0,0.6);
+            color: #ffcc80;
+            border: 1px dashed #ff9800;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            padding: 10px;
+            resize: vertical;
+        }
+
+        .info-pendientes {
+            color: #ccc;
+            font-size: 0.75rem;
+            text-align: center;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
@@ -169,6 +293,39 @@
     </div>
 
     <div class="grid-container" id="contenedor"></div>
+
+    <!-- BOTON FLOTANTE PARA AÑADIR CANCIONES PENDIENTES -->
+    <button class="btn-add-float" onclick="abrirModalAdd()">
+        ➕
+        <span class="badge-pendientes hidden" id="badgePendientes">0</span>
+    </button>
+
+    <!-- MODAL AÑADIR / EXPORTAR PENDIENTES -->
+    <div class="modal-overlay hidden" id="modalAdd">
+        <div class="modal-box">
+            <h3>➕ Añadir canción pendiente</h3>
+
+            <input type="text" id="inputTitulo" class="modal-input" placeholder="TÍTULO - ARTISTA">
+            <div style="display:flex; align-items:center; gap:0; margin-bottom:10px;">
+                <span style="background:rgba(0,0,0,0.8); border:2px solid #ff9800; border-right:none; border-radius:12px 0 0 12px; padding:10px 8px; font-size:0.8rem; color:#ff9800; white-space:nowrap;">m.youtube.com/watch?v=</span>
+                <input type="text" id="inputUrl" class="modal-input" placeholder="ID DEL VÍDEO" style="border-radius:0 12px 12px 0; margin-bottom:0;">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-guardar-pend" onclick="guardarPendiente()">💾 Guardar</button>
+            </div>
+
+            <h3>📋 Lista para copiar</h3>
+            <textarea class="textarea-pendientes" id="textareaPendientes" readonly onclick="this.select()"></textarea>
+            <div class="info-pendientes">Toca el cuadro para seleccionar todo, o usa el botón Copiar.</div>
+
+            <div class="modal-actions" style="margin-top: 15px;">
+                <button class="btn-copiar-pend" onclick="copiarPendientes()">📄 Copiar</button>
+                <button class="btn-vaciar-pend" onclick="vaciarPendientes()">🗑️ Vaciar</button>
+                <button class="btn-cerrar-pend" onclick="cerrarModalAdd()">✖ Cerrar</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const canciones = [
@@ -588,6 +745,106 @@
         let modoFavs = false;
         let favoritos = JSON.parse(localStorage.getItem('mis_favs')) || [];
 
+        // --- GESTIÓN DE CANCIONES PENDIENTES (para exportar y pegar en el array) ---
+        let pendientes = JSON.parse(localStorage.getItem('pendientes_karaoke')) || [];
+
+        function abrirModalAdd() {
+            document.getElementById('modalAdd').classList.remove('hidden');
+            renderPendientes();
+            document.getElementById('inputTitulo').focus();
+        }
+
+        function cerrarModalAdd() {
+            document.getElementById('modalAdd').classList.add('hidden');
+        }
+
+        const PREFIJO_YT = "https://m.youtube.com/watch?v=";
+
+        function guardarPendiente() {
+            const inputTitulo = document.getElementById('inputTitulo');
+            const inputUrl = document.getElementById('inputUrl');
+            const titulo = inputTitulo.value.trim();
+            let videoId = inputUrl.value.trim();
+
+            if (!titulo || !videoId) {
+                alert('Rellena el título y el ID del vídeo antes de guardar.');
+                return;
+            }
+
+            // Por si pegan la URL completa o parte de ella por error, nos quedamos solo con el ID
+            videoId = videoId.replace(/^https?:\/\/(m\.|www\.)?youtube\.com\/watch\?v=/, "");
+            videoId = videoId.replace(/^https?:\/\/youtu\.be\//, "");
+
+            pendientes.push({ titulo: titulo.toUpperCase(), url: PREFIJO_YT + videoId });
+            localStorage.setItem('pendientes_karaoke', JSON.stringify(pendientes));
+
+            inputTitulo.value = "";
+            inputUrl.value = "";
+            inputTitulo.focus();
+
+            renderPendientes();
+        }
+
+        function renderPendientes() {
+            const textarea = document.getElementById('textareaPendientes');
+            const texto = pendientes.map(c =>
+                `            { titulo: "${c.titulo}", url: "${c.url}" },`
+            ).join('\n');
+            textarea.value = texto;
+            actualizarBadge();
+        }
+
+        function actualizarBadge() {
+            const badge = document.getElementById('badgePendientes');
+            if (pendientes.length > 0) {
+                badge.classList.remove('hidden');
+                badge.innerText = pendientes.length;
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function copiarPendientes() {
+            const textarea = document.getElementById('textareaPendientes');
+            if (!textarea.value) {
+                alert('No hay canciones pendientes para copiar.');
+                return;
+            }
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+
+            let copiado = false;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textarea.value).then(() => {
+                    alert('¡Copiado! Ya puedes pegarlo en tu array "canciones".');
+                }).catch(() => {
+                    intentarCopiarFallback();
+                });
+                copiado = true;
+            }
+            if (!copiado) {
+                intentarCopiarFallback();
+            }
+        }
+
+        function intentarCopiarFallback() {
+            try {
+                document.execCommand('copy');
+                alert('¡Copiado! Ya puedes pegarlo en tu array "canciones".');
+            } catch (e) {
+                alert('No se pudo copiar automáticamente. Selecciona el texto a mano y usa copiar.');
+            }
+        }
+
+        function vaciarPendientes() {
+            if (pendientes.length === 0) return;
+            if (confirm('¿Seguro que quieres vaciar la lista de pendientes? Hazlo solo si ya las has copiado.')) {
+                pendientes = [];
+                localStorage.setItem('pendientes_karaoke', JSON.stringify(pendientes));
+                renderPendientes();
+            }
+        }
+
         function cargarCanciones() {
     const contenedor = document.getElementById('contenedor');
     
@@ -732,6 +989,7 @@ document.addEventListener('keydown', function(e) {
 
         window.onload = () => {
             cargarCanciones();
+            actualizarBadge();
             document.getElementById('buscador').focus();
         };
         function actualizarRelojYFecha() {
